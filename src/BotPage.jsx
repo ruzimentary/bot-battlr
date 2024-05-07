@@ -6,13 +6,21 @@ function BotPage() {
   const [bots, setBots] = useState([]);
 
   const getData = () => {
-    return fetch(`http://localhost:3000/bots`)
-      .then((res) => res.json())
+    fetch(`http://localhost:3000/bots`)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`Network response was not ok: ${res.statusText}`);
+        }
+        return res.json();
+      })
       .then((data) => {
         setBots(data);
+      })
+      .catch((error) => {
+        console.error('Error fetching bots:', error);
       });
   };
-
+  
   useEffect(() => {
     getData();
   }, []);

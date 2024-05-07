@@ -1,61 +1,42 @@
 import React from "react";
 
-const classBot = {
-  Assault: "fas fa-fighter-jet",
-  Defender: "fas fa-shield-alt",
-  Support: "fas fa-user-tie",
-  Medic: "fas fa-ambulance",
-  Witch: "fas fa-broom",
-  Captain: "fas fa-star",
-};
+function BotCard({ bot, onEnlist, onDelete }) {
 
-function BotCard({ bot, clickEvent, deleteBot }) {
+  const handleEnlist = () => {
+    onEnlist(bot);
+  };
+
+  const handleDelete = (event) => {
+    event.stopPropagation();
+    onDelete(bot);
+  };
+
   return (
-    <div className="col-3 p-1">
-      <div
-        className="card h-100 shadow p-3 mb-5 bg-body rounded"
-        key={bot.id}
-        onClick={() => clickEvent(bot)}
-      >
-        <img
-          className="card-img-top"
-          src={bot.avatar_url}
-          alt="bot incoming!"
-        />
-        <div className="card-body">
-          <div className="card-title">
-            {bot.name}
-            <i className={classBot[bot.bot_class]} />
-          </div>
-          <div className="card-text">
-            <small>{bot.catchphrase}</small>
-          </div>
-        </div>
-        <div className="card-text">
-          <span>
-            <i className="fas fa-heartbeat" /> Health: {bot.health} <br />
-          </span>
-          <span>
-            <i className="fas fa-bolt" />
-            Damage: {bot.damage} <br />
-          </span>
-          <span>
-            <i className="fas fa-shield-alt" /> Armour: {bot.armor}
-          </span>
-          <span>
-            <div>
-              <button
-                className="btn btn-warning"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  deleteBot(bot);
-                }}
-              >
-                delete
-              </button>
-            </div>
-          </span>
-        </div>
+    <div
+      className="card m-2"
+      onClick={handleEnlist}
+      style={{ cursor: "pointer" }}
+    >
+      <img
+        className="card-img-top"
+        src={bot.avatar_url}
+        alt={`${bot.name} avatar`}
+      />
+      <div className="card-body">
+        <h5 className="card-title">{bot.name}</h5>
+        <p className="card-text">
+          <strong>Class:</strong> {bot.bot_class} <br />
+          <strong>Health:</strong> {bot.health} <br />
+          <strong>Damage:</strong> {bot.damage} <br />
+          <strong>Armor:</strong> {bot.armor} <br />
+          <small>{bot.catchphrase}</small>
+        </p>
+        <button
+          className="btn btn-danger"
+          onClick={handleDelete}
+        >
+          Delete
+        </button>
       </div>
     </div>
   );
