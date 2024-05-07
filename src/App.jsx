@@ -1,38 +1,48 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import BotCollection from "./components/BotCollection";
-import YourBotArmy from "./components/YourBotArmy";
-import BotSpecs from "./components/BotSpecs";
 import SortBar from "./components/SortBar";
-import "./App.css";
 
 const App = () => {
   const [bots, setBots] = useState([]);
-  const [army, setArmy] = useState([]);
-  const [selectedBot, setSelectedBot] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const handleBotClick = (botId) => {
-    const bot = bots.find((bot) => bot.id === botId);
-    setSelectedBot(bot);
-  };
+  useEffect(() => {
+    const fetchBots = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/bots"); // Corrected URL
+        if (!response.ok) {
+          throw new Error("Failed to fetch bots data");
+        }
+        const data = await response.json();
+        setBots(data);
+        setLoading(false);
+      } catch (error) {
+        setError(error.message);
+        setLoading(false);
+      }
+    };
 
-  const handleEnlistBot = (bot) => {
-    setArmy([...army, bot]);
-  };
+    fetchBots();
+  }, []);
 
-  const handleReleaseBot = (botId) => {
-    const updatedArmy = army.filter((bot) => bot.id !== botId);
-    setArmy(updatedArmy);
-  };
+  if (loading) {
+    return <p>Loading bots data...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
+
+  if (bots.length === 0) {
+    return <p>No bots available.</p>;
+  }
 
   return (
     <div className="App">
       <h1>Bot App</h1>
-      <div className="container">
-        <BotCollection bots={bots} onBotClick={handleBotClick} />
-        <SortBar />
-        <YourBotArmy army={army} onReleaseBot={handleReleaseBot} />
-      </div>
-      <BotSpecs bot={selectedBot} onEnlistClick={handleEnlistBot} />
+      <SortBar />
+      <BotCollection bots={bots} />
     </div>
   );
 };
