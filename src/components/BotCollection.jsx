@@ -1,25 +1,25 @@
-
 import React from "react";
 import BotCard from "./BotCard";
 
-function BotCollection({ bots = [], onEnlistBot }) {
- 
-  if (!Array.isArray(bots)) {
-    console.error("The `bots` prop should be an array.");
-    return <p>No bots available</p>;
-  }
+function BotCollection({ numberBots, enlistBot, deleteBot }) {
+    const showBot = numberBots.map((bot) => {
+        return (
+            <BotCard 
+                key={bot.id}
+                bot={bot}
+                clickEvent={enlistBot}
+                deleteBot={deleteBot}
+            />
+        );
+    });
 
-  return (
-    <div className="bot-collection">
-      {bots.length > 0 ? (
-        bots.map((bot) => (
-          <BotCard key={bot.id} bot={bot} onEnlistBot={onEnlistBot} />
-        ))
-      ) : (
-        <p>No bots available</p>
-      )}
-    </div>
-  );
+    return (
+        <div className="container mt-4">
+            <div className="row">
+                {showBot}
+            </div>
+        </div>
+    );
 }
 
 export default BotCollection;
