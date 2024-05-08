@@ -22,7 +22,7 @@ const BotPage = () => {
 
         const processedData = data.map((bot) => ({
           ...bot,
-          id: Number(bot.id) // Convert to number for consistency
+          id: Number(bot.id) 
         }));
 
         setBots(processedData);
@@ -42,7 +42,7 @@ const BotPage = () => {
   };
 
   const handleEnlistBot = (bot) => {
-    // Only enlist a bot if its class isn't already present in the army
+  
     if (!army.some((b) => b.bot_class === bot.bot_class)) {
       setArmy((prevArmy) => [...prevArmy, bot]);
     }
