@@ -46,6 +46,9 @@ const BotPage = () => {
     if (!army.some((b) => b.bot_class === bot.bot_class)) {
       setArmy((prevArmy) => [...prevArmy, bot]);
     }
+  };  const handleDelete = (bot) => {
+    console.log(`Deleting bot: ${bot.name}`);
+    setBots((prevBots) => prevBots.filter((b) => b.id !== bot.id));
   };
 
   const handleSortChange = (sortType) => {
@@ -89,7 +92,11 @@ const BotPage = () => {
       <YourBotArmy army={army} onReleaseBot={handleReleaseBot} />
       <div className="bot-collection">
         {filteredBots.map((bot) => (
-          <BotCard key={bot.id} bot={bot} onEnlist={() => handleEnlistBot(bot)} />
+          <BotCard 
+          key={bot.id} 
+          bot={bot} 
+          onEnlist={() => handleEnlistBot(bot)}
+          onDelete={() => handleDelete (bot) } />
         ))}
       </div>
     </div>
