@@ -1,3 +1,4 @@
+// SortBar.js
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -22,14 +23,14 @@ const SortBar = ({ onSortChange, onClassFilterChange }) => {
       </select>
 
       <h3>Filter By Class:</h3>
-      {BOT_CLASSES.map((className) => (
-        <div key={className}>
-          <label>
+      <div className="sort-bar-filters">
+        {BOT_CLASSES.map((className) => (
+          <label key={className}>
             <input type="checkbox" name={className} onChange={handleCheckboxChange} />
             {className}
           </label>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };
