@@ -1,57 +1,81 @@
-import React, { useState, useEffect } from "react";
-import BotCollection from "./components/BotCollection";
-import YourBotArmy from "./components/YourBotArmy";
+import React, { useState, useEffect } from 'react';
+import YourBotArmy from './components/YourBotArmy';
+import BotCard from './components/BotCard';
+import SortBar from './components/SortBar';
 
-function BotPage() {
+const BotPage = () => {
+  const [army, setArmy] = useState([]);
   const [bots, setBots] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const getData = () => {
-    fetch(`http://localhost:3000/bots`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`Network response was not ok: ${res.statusText}`);
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setBots(data);
-      })
-      .catch((error) => {
-        console.error('Error fetching bots:', error);
-      });
-  };
-  
   useEffect(() => {
-    getData();
+    const fetchBots = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/bots');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+
+        const processedData = data.map((bot) => ({
+          ...bot,
+          id: Number(bot.id) // Convert to number for consistency
+        }));
+
+        setBots(processedData);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchBots();
   }, []);
 
-  const enlistBot = (bot) => {
-    setBots(bots.map((b) => (b.id === bot.id ? { ...b, army: true } : b)));
+  const handleReleaseBot = (botId) => {
+    setArmy((prevArmy) => prevArmy.filter((bot) => bot.id !== botId));
   };
 
-  const removeBot = (bot) => {
-    setBots(bots.map((b) => (b.id === bot.id ? { ...b, army: false } : b)));
+  const handleEnlistBot = (bot) => {
+    if (!army.find((b) => b.id === bot.id)) {
+      setArmy((prevArmy) => [...prevArmy, bot]);
+    }
   };
 
-  const deleteBot = (bot) => {
-    const botRemoved = bots.filter((b) => b.id !== bot.id);
-    setBots((bots) => botRemoved);
+  const handleSortChange = (sortType) => {
+    let sortedBots = [];
+    if (sortType === 'health') {
+      sortedBots = [...bots].sort((a, b) => b.health - a.health);
+    } else if (sortType === 'damage') {
+      sortedBots = [...bots].sort((a, b) => b.damage - a.damage);
+    } else if (sortType === 'armor') {
+      sortedBots = [...bots].sort((a, b) => b.armor - a.armor);
+    }
+    setBots(sortedBots);
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div>
-      <YourBotArmy
-        bots={bots.filter((b) => b.army)}
-        removeBot={removeBot}
-        deleteBot={deleteBot}
-      />
-      <BotCollection
-        numberBots={bots}
-        enlistBot={enlistBot}
-        deleteBot={deleteBot}
-      />
+      <h1>Bot Management</h1>
+      <SortBar onSortChange={handleSortChange} />
+      <YourBotArmy army={army} onReleaseBot={handleReleaseBot} />
+      <div className="bot-collection">
+        {bots.map((bot) => (
+          <BotCard key={bot.id} bot={bot} onEnlist={() => handleEnlistBot(bot)} />
+        ))}
+      </div>
     </div>
   );
-}
+};
 
 export default BotPage;
