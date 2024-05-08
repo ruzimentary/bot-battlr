@@ -1,6 +1,3 @@
-/* app.css */
-
-/* Global app container */
 .bot-management {
   font-family: 'Roboto', sans-serif;
   color: #e0e0e0;
@@ -70,16 +67,37 @@ h1, h2, h3 {
   box-shadow: 0 4px 8px rgba(0, 255, 255, 0.5);
 }
 
-/* Your bot army section */
+/* Container for the army cards */
 .your-bot-army {
   margin: 40px 0;
-  max-width: 800px;
-  width: 100%;
-  padding: 24px;
-  border: 2px solid #00ffff;
-  border-radius: 16px;
-  box-shadow: 0 6px 12px rgba(0, 255, 255, 0.3);
+  padding: 16px;
+  border: 2px solid #00ffff; 
+  border-radius: 12px;
+  background: #1c1c2b; 
+  box-shadow: 0 4px 8px rgba(0, 255, 255, 0.3);
+}
+
+.army-collection {
+  display: flex;
+  flex-wrap: wrap; 
+  gap: 16px; 
+  justify-content: center; 
+  align-items: center; 
+  padding: 16px;
+}
+
+/* Individual army card styling */
+.army-card {
   background: #1c1c2b;
+  border: 2px solid #00ffff; 
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 255, 255, 0.3);
+  text-align: center;
+  padding: 12px;
+  width: 180px; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* Sort bar container */
@@ -92,7 +110,7 @@ h1, h2, h3 {
 
 .sort-bar-filters {
   display: flex;
-  flex-direction: row; /* Arrange filters horizontally */
+  flex-direction: row; 
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;

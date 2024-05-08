@@ -1,0 +1,71 @@
+.bot-specs {
+    text-align: center;
+    padding: 20px;
+    background-color: #2c2c54;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    color: #f0f0f0; 
+    max-width: 400px;
+    margin: auto;
+  }
+  
+  .bot-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px solid #00c9ff;
+    box-shadow: 0 4px 8px rgba(0, 201, 255, 0.5); 
+    margin-bottom: 16px;
+  }
+  
+  .bot-name {
+    font-size: 24px;
+    margin: 16px 0;
+    color: #92fe9d; 
+  }
+  
+  .bot-details {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0;
+  }
+  
+  .bot-details li {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+  
+  .bot-catchphrase {
+    font-style: italic;
+    margin: 16px 0;
+    color: #ffde5a; 
+  }
+  
+  .bot-actions {
+    margin-top: 16px;
+  }
+  
+  .btn {
+    background-color: #3a3a67;
+    color: #f0f0f0;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin: 5px;
+    transition: all 0.3s;
+  }
+  
+  .back-btn {
+    background-color: #ff7675;
+  }
+  
+  .enlist-btn {
+    background-color: #55efc4;
+  }
+  
+  .btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+  
