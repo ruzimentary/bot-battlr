@@ -6,8 +6,10 @@ import SortBar from './components/SortBar';
 const BotPage = () => {
   const [army, setArmy] = useState([]);
   const [bots, setBots] = useState([]);
+  const [filteredBots, setFilteredBots] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedClasses, setSelectedClasses] = useState([]);
 
   useEffect(() => {
     const fetchBots = async () => {
@@ -24,6 +26,7 @@ const BotPage = () => {
         }));
 
         setBots(processedData);
+        setFilteredBots(processedData);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -39,7 +42,8 @@ const BotPage = () => {
   };
 
   const handleEnlistBot = (bot) => {
-    if (!army.find((b) => b.id === bot.id)) {
+    // Only enlist a bot if its class isn't already present in the army
+    if (!army.some((b) => b.bot_class === bot.bot_class)) {
       setArmy((prevArmy) => [...prevArmy, bot]);
     }
   };
@@ -47,13 +51,27 @@ const BotPage = () => {
   const handleSortChange = (sortType) => {
     let sortedBots = [];
     if (sortType === 'health') {
-      sortedBots = [...bots].sort((a, b) => b.health - a.health);
+      sortedBots = [...filteredBots].sort((a, b) => b.health - a.health);
     } else if (sortType === 'damage') {
-      sortedBots = [...bots].sort((a, b) => b.damage - a.damage);
+      sortedBots = [...filteredBots].sort((a, b) => b.damage - a.damage);
     } else if (sortType === 'armor') {
-      sortedBots = [...bots].sort((a, b) => b.armor - a.armor);
+      sortedBots = [...filteredBots].sort((a, b) => b.armor - a.armor);
     }
-    setBots(sortedBots);
+    setFilteredBots(sortedBots);
+  };
+
+  const handleClassFilterChange = (className, isChecked) => {
+    const newClasses = isChecked
+      ? [...selectedClasses, className]
+      : selectedClasses.filter((c) => c !== className);
+
+    setSelectedClasses(newClasses);
+
+    // Apply the filtering
+    const filtered = bots.filter((bot) =>
+      newClasses.length === 0 ? true : newClasses.includes(bot.bot_class)
+    );
+    setFilteredBots(filtered);
   };
 
   if (isLoading) {
@@ -67,10 +85,10 @@ const BotPage = () => {
   return (
     <div>
       <h1>Bot Management</h1>
-      <SortBar onSortChange={handleSortChange} />
+      <SortBar onSortChange={handleSortChange} onClassFilterChange={handleClassFilterChange} />
       <YourBotArmy army={army} onReleaseBot={handleReleaseBot} />
       <div className="bot-collection">
-        {bots.map((bot) => (
+        {filteredBots.map((bot) => (
           <BotCard key={bot.id} bot={bot} onEnlist={() => handleEnlistBot(bot)} />
         ))}
       </div>

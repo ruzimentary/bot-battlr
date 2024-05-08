@@ -1,21 +1,42 @@
-import React from "react";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-const SortBar = ({ onSortChange }) => {
-  const handleSortChange = (e) => {
-    const sortOption = e.target.value;
-    onSortChange(sortOption);
+const BOT_CLASSES = ["Support", "Medic", "Assault", "Defender", "Captain", "Witch"];
+
+const SortBar = ({ onSortChange, onClassFilterChange }) => {
+  const handleSortChange = (event) => {
+    onSortChange(event.target.value);
+  };
+
+  const handleCheckboxChange = (event) => {
+    onClassFilterChange(event.target.name, event.target.checked);
   };
 
   return (
-    <div>
-      <label htmlFor="sort">Sort By:</label>
-      <select id="sort" onChange={handleSortChange}>
+    <div className="sort-bar">
+      <h3>Sort Bots By:</h3>
+      <select onChange={handleSortChange}>
         <option value="health">Health</option>
         <option value="damage">Damage</option>
         <option value="armor">Armor</option>
       </select>
+
+      <h3>Filter By Class:</h3>
+      {BOT_CLASSES.map((className) => (
+        <div key={className}>
+          <label>
+            <input type="checkbox" name={className} onChange={handleCheckboxChange} />
+            {className}
+          </label>
+        </div>
+      ))}
     </div>
   );
+};
+
+SortBar.propTypes = {
+  onSortChange: PropTypes.func.isRequired,
+  onClassFilterChange: PropTypes.func.isRequired
 };
 
 export default SortBar;
