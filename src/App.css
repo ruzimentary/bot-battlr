@@ -1,14 +1,27 @@
+/* Container for scrolling bot army */
 .bot-army {
-  overflow-x: scroll;
+  overflow-x: auto; /* Change to 'auto' for both scroll and no-scroll scenarios */
   min-height: 300px;
   max-width: 100%;
+  padding: 16px; /* Add some padding for spacing */
+  display: grid; /* Use a grid layout directly */
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Ensure responsive grid columns */
+  gap: 16px; /* Add spacing between bots */
+  justify-items: center; /* Center-align items horizontally */
+  align-items: start; /* Align items to the top */
 }
 
+/* Ensure the individual bot cards maintain alignment in grid rows */
 .ui.grid > .row.bot-army-row {
-  flex-wrap: nowrap;
+  flex-wrap: wrap; /* Allow wrapping to multiple rows */
+  justify-content: center; /* Center-align across the parent container */
   min-height: 100%;
 }
 
+/* Parent grid container padding adjustments */
 .ui.grid {
-  padding: 0px 20px;
+  padding: 0 20px; /* Maintain the current horizontal padding */
+  display: flex;
+  flex-direction: column; /* Adjust to stack rows vertically */
+  align-items: center; /* Center-align vertically stacked rows */
 }
